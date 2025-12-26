@@ -2,9 +2,6 @@ from pydantic import Field
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
-from typing import ClassVar
-
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -21,10 +18,18 @@ class Settings(BaseSettings):
     debug: bool = Field(default=False, description="Debug mode")
     environment: str = Field(default="development", description="Environment")
 
+    DATA_DIR: Path = Field(default=Path("/data"))
+
     # Database urls
-    CHROMA_DIR: ClassVar[Path] = BASE_DIR / "data" / "chroma"
-    USER_DB: ClassVar[Path] = f"sqlite:///{(BASE_DIR / 'data' / 'user.db').as_posix()}"
-    CHAT_DB: ClassVar[Path] = f"sqlite:///{(BASE_DIR / 'data' / 'chat_history.db').as_posix()}"
+    CHROMA_DIR: Path = Field(default=Path("/data/chroma"))
+    USER_DB: str = Field(
+        default="sqlite:////data/user.db",
+        description="User database URL"
+    )
+    CHAT_DB: str = Field(
+        default="sqlite:////data/chat_history.db",
+        description="Chat history database URL"
+    )
 
     # Text Splitter
     CHUNK_SIZE: int = 800

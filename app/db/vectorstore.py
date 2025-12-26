@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-settings = get_settings()
 _embeddings = None
 
 def get_embeddings():
@@ -20,6 +19,9 @@ def get_vectorstore(
     """
     Returns a video scoped vector store.
     """
+    settings = get_settings()
+    settings.CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+    
     path = settings.CHROMA_DIR / f"video_{video_id}"
     embedding_model = get_embeddings()
 

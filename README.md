@@ -83,7 +83,7 @@ app/
 ├── models/
 │   └── user_db.py
 │   └── ingested_data.py
-├── main.py
+main.py
 ```
 
 ---
