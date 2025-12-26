@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from app.core.config import get_settings
 from app.db.vectorstore import get_vectorstore
 from app.auth.ingested_data import get_ingestion_metadata, upsert_ingestion_metadata
-from app.db.session import SessionLocal
+from app.db.user_db import SessionLocal
 
 load_dotenv()
 
@@ -41,7 +41,6 @@ def resolve_transcript(video_id: str) -> Tuple[str, str, str]:
     try:
         t = transcript_list.find_manually_created_transcript(["en"])
         data = t.fetch()
-        print(data)
         return " ".join(x.text for x in data), "en", "manual"
     except NoTranscriptFound:
         pass
@@ -50,7 +49,6 @@ def resolve_transcript(video_id: str) -> Tuple[str, str, str]:
     try:
         t = transcript_list.find_generated_transcript(["en"])
         data = t.fetch()
-        print(data)
         return " ".join(x.text for x in data), "en", "auto"
     except NoTranscriptFound:
         pass

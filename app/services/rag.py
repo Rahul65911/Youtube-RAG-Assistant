@@ -44,8 +44,6 @@ def stream_chain(chain, question):
                     "event": "message",
                     "data": chunk
                 }
-
-                print(f"{payload}\n\n")
                 yield f"{json.dumps(payload)}\n\n"
 
         yield f"{json.dumps({'event': 'end'})}\n\n"

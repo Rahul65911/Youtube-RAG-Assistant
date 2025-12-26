@@ -13,8 +13,7 @@ router = APIRouter(prefix='/ingest', tags=['Ingest'])
 @router.post("/youtube")
 async def ingest_youtube_route(req: YoutubeIngestRequest, user=Depends(get_current_user), db: Session = Depends(get_db)):
     try:
-        with db.begin():
-            total_chunks = await run_in_threadpool(ingest_youtube_threaded, req.video_id)
+        total_chunks = await run_in_threadpool(ingest_youtube_threaded, req.video_id)
         return {'status': 'success', 'chunks_added': total_chunks}
     
     except TranscriptsDisabled:
