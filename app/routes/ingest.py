@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from youtube_transcript_api import TranscriptsDisabled, NoTranscriptFound
 from fastapi.concurrency import run_in_threadpool
 
-from app.services.ingest import ingest_youtube
+from app.services.ingest import ingest_youtube_threaded
 from app.core.schema import YoutubeIngestRequest
 from app.auth.dependencies import get_current_user
 from app.db.session import get_db
@@ -14,7 +14,7 @@ router = APIRouter(prefix='/ingest', tags=['Ingest'])
 async def ingest_youtube_route(req: YoutubeIngestRequest, user=Depends(get_current_user), db: Session = Depends(get_db)):
     try:
         with db.begin():
-            total_chunks = await run_in_threadpool(ingest_youtube, req.video_id, db)
+            total_chunks = await run_in_threadpool(ingest_youtube_threaded, req.video_id)
         return {'status': 'success', 'chunks_added': total_chunks}
     
     except TranscriptsDisabled:
@@ -38,5 +38,5 @@ async def ingest_youtube_route(req: YoutubeIngestRequest, user=Depends(get_curre
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to ingest video",
+            detail=f"Failed to ingest video {e}",
         )

@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from app.core.config import get_settings
 from app.db.vectorstore import get_vectorstore
 from app.auth.ingested_data import get_ingestion_metadata, upsert_ingestion_metadata
+from app.db.session import SessionLocal
 
 load_dotenv()
 
@@ -100,6 +101,12 @@ def fetch_video_metadata(video_id: str, api_key: str) -> dict:
         "duration": content.get("duration"),
     }
 
+def ingest_youtube_threaded(video_id: str) -> int:
+    db = SessionLocal()
+    try:
+        ingest_youtube(video_id, db)
+    except:
+        db.close()
 
 def ingest_youtube(video_id: str, db: Session) -> int:
     try:
@@ -152,8 +159,5 @@ def ingest_youtube(video_id: str, db: Session) -> int:
 
         return len(chunks)
 
-    except TranscriptsDisabled:
-        raise e
-    
-    except NoTranscriptFound:
-        raise e
+    except (TranscriptsDisabled, NoTranscriptFound):
+        raise
