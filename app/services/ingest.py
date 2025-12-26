@@ -102,8 +102,11 @@ def fetch_video_metadata(video_id: str, api_key: str) -> dict:
 def ingest_youtube_threaded(video_id: str) -> int:
     db = SessionLocal()
     try:
-        ingest_youtube(video_id, db)
-    except:
+        return ingest_youtube(video_id, db)
+    except Exception:
+        print("DB Connection failed!")
+        raise
+    finally:
         db.close()
 
 def ingest_youtube(video_id: str, db: Session) -> int:
