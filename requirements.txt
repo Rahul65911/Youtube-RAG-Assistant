@@ -1,0 +1,42 @@
+# Web framework
+fastapi
+uvicorn[standard]
+
+# Environment variables
+python-dotenv
+
+# Data validation
+pydantic
+pydantic[email]
+
+# Database (SQLite / SQLAlchemy)
+sqlalchemy
+
+# Auth & Security
+passlib[argon2]
+argon2_cffi
+python-jose[cryptography]
+
+# HTTP & utilities
+requests
+
+# LangChain core stack
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-chroma
+langchain-cohere
+langchain-huggingface
+
+# Vector stores
+chromadb
+
+# Hugging Face
+huggingface-hub
+
+# Embeddings / LLM providers
+cohere
+
+# YouTube transcript
+youtube-transcript-api

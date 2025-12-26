@@ -1,0 +1,30 @@
+# Python
+__pycache__/*
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.env
+.env.*
+backend-venv/
+.backend-venv
+venv/
+.venv/
+ENV/
+env/
+
+# FastAPI / Uvicorn
+*.log
+uvicorn.log
+
+# Databases
+data/
+*.sqlite
+*.sqlite3
+*.db
+
+# Secrets
+*.pem
+*.key

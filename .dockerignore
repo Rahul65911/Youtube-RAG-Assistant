@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.env
+.env.*
+
+# Virtual Environments
+venv/
+.venv/
+ENV/
+env/
+backend-venv/
+.backend-venv
+
+# Git / CI
+.git/
+.gitignore
+.github/
+
+# Databases / Vector Stores
+data/
+chroma_db/
+chromadb/
+*.sqlite
+*.sqlite3
+*.db
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Docs / Misc
+README.md
+*.log
