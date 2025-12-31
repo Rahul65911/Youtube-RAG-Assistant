@@ -11,6 +11,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.post("/signup", status_code=201)
 def signup(req: SignUpRequest, db: Session = Depends(get_db)):
+    print(req)
     if get_user_by_username(db, req.username):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -29,6 +30,7 @@ def signup(req: SignUpRequest, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=TokenResponse)
 def login(req: LoginRequest, db: Session = Depends(get_db)):
+    print(req)
     user = authenticate_user(db, req.username, req.password)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
