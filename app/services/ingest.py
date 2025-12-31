@@ -31,7 +31,7 @@ def resolve_transcript(video_id: str) -> Tuple[str, str, str]:
     """
 
     try:
-        data = YouTubeTranscriptApi().get_transcript(video_id, languages=["en"])
+        data = YouTubeTranscriptApi().fetch(video_id, languages=["en"])
         return " ".join(x.text for x in data)
     
     except TranscriptsDisabled:
