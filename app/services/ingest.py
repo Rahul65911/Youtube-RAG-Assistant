@@ -24,39 +24,21 @@ text_splitter = RecursiveCharacterTextSplitter(
     chunk_overlap=settings.CHUNK_OVERLAP
 )
 
-def get_transcript_list(video_id: str):
-    return YouTubeTranscriptApi().list(video_id=video_id)
-
 def resolve_transcript(video_id: str) -> Tuple[str, str, str]:
     """
     Returns:
     - transcript text (english)
-    - final language ("en")
-    - source ("manual" | "auto" | "translated-hi")
     """
 
-    transcript_list = get_transcript_list(video_id)
-
-    # 1. Manual English
     try:
-        t = transcript_list.find_manually_created_transcript(["en"])
-        data = t.fetch()
-        return " ".join(x.text for x in data), "en", "manual"
-    except NoTranscriptFound:
-        pass
-
-    # 2. Auto English
-    try:
-        t = transcript_list.find_generated_transcript(["en"])
-        data = t.fetch()
-        return " ".join(x.text for x in data), "en", "auto"
-    except NoTranscriptFound:
-        pass
+        data = YouTubeTranscriptApi().get_transcript(video_id, languages=["en"])
+        return " ".join(x.text for x in data)
+    
+    except TranscriptsDisabled:
+        raise
 
     except NoTranscriptFound:
-        pass
-
-    raise NoTranscriptFound("No supported transcript found")
+        raise NoTranscriptFound("No English transcript found")
 
 def normalize_text(text: str) -> str:
     """
@@ -113,7 +95,7 @@ def ingest_youtube(video_id: str, db: Session) -> int:
     try:
         vector_store = get_vectorstore(video_id)
         
-        transcript, language, source = resolve_transcript(video_id)
+        transcript = resolve_transcript(video_id)
         
         normalized_transcript = normalize_text(transcript)
         transcript_hash = hash_text(normalized_transcript)
@@ -133,8 +115,6 @@ def ingest_youtube(video_id: str, db: Session) -> int:
         normalized_metadata = {
             **metadata,
             "tags": ", ".join(metadata["tags"]) if metadata.get("tags") else None,
-            "language": language,
-            "source_type": source,
         }
 
         Docs = [
