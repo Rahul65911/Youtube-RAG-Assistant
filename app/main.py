@@ -15,7 +15,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         'http://localhost:5173',
-        'chrome-extension://eaaamibjpjpkkidgbocdcaegchlcpjfj'
+        'chrome-extension://eaaamibjpjpkkidgbocdcaegchlcpjfj',
+        'chrome-extension://mcbfnheghddpkchnfbamlnbjcidlbhnd'
     ],
     allow_credentials=True,
     allow_methods=["*"],
